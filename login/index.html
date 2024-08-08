@@ -12,7 +12,10 @@
     <div class="w-full max-w-sm bg-white p-6 rounded-lg shadow-md">
         <h2 class="text-2xl font-semibold text-gray-800 text-center mb-4">Pastor Login</h2>
         
-        <form action="login.php" method="POST">
+        <!-- Error Message Display -->
+        <div id="error-message" class="text-red-500 text-center mb-4 hidden"></div>
+
+        <form id="loginForm" method="POST">
             <div class="mb-4">
                 <label class="block text-gray-700 text-sm font-bold mb-2" for="username">
                     <i class="fas fa-user"></i> Username
@@ -49,5 +52,44 @@
         </form>
     </div>
 
+    <!-- Include jQuery for easy AJAX handling -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#loginForm').submit(function(e) {
+                e.preventDefault(); // Prevent the default form submission
+
+                // Get the form data
+                var formData = {
+                    username: $('#username').val(),
+                    password: $('#password').val()
+                };
+
+                // Clear any previous error message
+                $('#error-message').hide().text('');
+
+                // Send the AJAX request
+                $.ajax({
+                    type: 'POST',
+                    url: 'login.php',
+                    data: formData,
+                    dataType: 'json',
+                    encode: true,
+                    success: function(response) {
+                        if (response.success) {
+                            // Redirect to the dashboard if login is successful
+                            window.location.href = 'dashboard.php';
+                        } else {
+                            // Show the error message
+                            $('#error-message').text(response.message).show();
+                        }
+                    },
+                    error: function() {
+                        $('#error-message').text('An unexpected error occurred. Please try again.').show();
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>
