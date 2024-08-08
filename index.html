@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Church Management System</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        .sidebar { transition: all 0.3s ease; }
+        .sidebar.collapsed { width: 80px; }
+        .sidebar.collapsed .sidebar-menu { display: none; }
+        .sidebar.collapsed .sidebar-menu .menu-item { text-align: center; }
+        .content { transition: all 0.3s ease; margin-left: 16rem; }
+        .sidebar.collapsed + .content { margin-left: 4rem; }
+    </style>
+</head>
+<body class="flex h-screen bg-gray-100">
+
+    <!-- Sidebar -->
+    <div id="sidebar" class="sidebar bg-blue-800 text-white h-full w-64 p-4 flex flex-col justify-between">
+        <div>
+            <div class="flex items-center mb-6">
+                <i class="fas fa-church text-3xl"></i>
+                <span id="sidebar-title" class="ml-4 text-2xl font-semibold">CMS</span>
+            </div>
+            <ul class="sidebar-menu">
+                <li id="dashboard" class="menu-item flex items-center py-2 px-4 cursor-pointer hover:bg-blue-700 rounded">
+                    <i class="fas fa-tachometer-alt text-xl"></i>
+                    <span class="ml-4">Dashboard</span>
+                </li>
+                <li id="members" class="menu-item flex items-center py-2 px-4 cursor-pointer hover:bg-blue-700 rounded">
+                    <i class="fas fa-users text-xl"></i>
+                    <span class="ml-4">Members</span>
+                </li>
+                <li id="elders" class="menu-item flex items-center py-2 px-4 cursor-pointer hover:bg-blue-700 rounded">
+                    <i class="fas fa-user-tie text-xl"></i>
+                    <span class="ml-4">Elders</span>
+                </li>
+                <li id="offertory" class="menu-item flex items-center py-2 px-4 cursor-pointer hover:bg-blue-700 rounded">
+                    <i class="fas fa-hand-holding-usd text-xl"></i>
+                    <span class="ml-4">Offertory</span>
+                </li>
+                <li id="attendance" class="menu-item flex items-center py-2 px-4 cursor-pointer hover:bg-blue-700 rounded">
+                    <i class="fas fa-calendar-check text-xl"></i>
+                    <span class="ml-4">Attendance</span>
+                </li>
+            </ul>
+        </div>
+        <div>
+            <button id="logout" class="flex items-center w-full py-2 px-4 text-red-500 hover:bg-blue-700 rounded">
+                <i class="fas fa-sign-out-alt text-xl"></i>
+                <span class="ml-4">Logout</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Content -->
+    <div id="content" class="content flex-1 p-8">
+        <!-- Content will be loaded here -->
+        <div id="page-content">
+            <h1 class="text-3xl font-bold mb-4">Dashboard</h1>
+            <!-- Dashboard content here -->
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const sidebar = document.getElementById('sidebar');
+            const content = document.getElementById('content');
+            const pageContent = document.getElementById('page-content');
+            const sidebarTitle = document.getElementById('sidebar-title');
+
+            // Sidebar toggle
+            sidebar.addEventListener('click', () => {
+                sidebar.classList.toggle('collapsed');
+                sidebarTitle.classList.toggle('hidden');
+            });
+
+            // Menu item click
+            document.querySelectorAll('.menu-item').forEach(item => {
+                item.addEventListener('click', (e) => {
+                    const page = e.currentTarget.id;
+                    loadPage(page);
+                });
+            });
+
+            // Logout click
+            document.getElementById('logout').addEventListener('click', () => {
+                // Handle logout logic here
+                alert('Logged out!');
+            });
+
+            function loadPage(page) {
+                fetch(`${page}.html`)
+                    .then(response => response.text())
+                    .then(html => {
+                        pageContent.innerHTML = html;
+                    });
+            }
+        });
+    </script>
+</body>
+</html>
