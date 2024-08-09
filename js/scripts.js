@@ -1,4 +1,4 @@
-
+//Start of Dashboard Scripts
 function initializeDashboardScripts(){
     
     // begining dashboard scripts
@@ -54,9 +54,10 @@ function initializeDashboardScripts(){
                 });
             })
             .catch(error => console.error('Error fetching chart data:', error));
-            // end of dashboard scripts
+            
     };
 
+//End of Dashboard Scripts
 
 
 
@@ -66,8 +67,7 @@ function initializeDashboardScripts(){
 
 
 
-
-    //Member Scripts.
+//Start of Member Scripts.
 function initializeMemberScripts(){
 
         // Auto-filter members as user types in the search bar
@@ -215,12 +215,40 @@ function initializeMemberScripts(){
         });
    
 }
+//End of Member Scripts
 
 
 
 
 
-
+//Start of Elder scripts
+function initializeElderScripts(){
+    document.getElementById('elderForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+    
+        const formData = new FormData(this);
+        const elderId = document.getElementById('elderId').value;
+    
+        fetch(elderId ? 'update_elder.php' : 'add_elder.php', {
+            method: 'POST',
+            body: formData,
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                Swal.fire('Success', data.message, 'success');
+                setTimeout(() => location.reload(), 1500);
+            } else {
+                Swal.fire('Error', data.message, 'error');
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    });
+    
+    // Add similar event listeners for the edit and delete buttons
+      
+}
+//End of Member Scripts
 const sidebar = document.getElementById("sidebar");
 const content = document.getElementById("content");
 const sidebarTitle = document.getElementById("sidebarTitle");
@@ -279,11 +307,13 @@ document.querySelectorAll(".sidebar-link").forEach((link) => {
                 document.getElementById("content").innerHTML = html;
 
                 //initializeDashboardScripts
-                if (lastPage === "./dashboard/dashboard.php") {
+                if (lastPage === "./dashboard/index.php") {
                     initializeDashboardScripts();
                    
-                }else if(lastPage === "./members/members.php"){
+                }else if(lastPage === "./members/index.php"){
                     initializeMemberScripts();
+                }else if(lastPage === "./elders/index.php"){
+                    initializeElderScripts();
                 }
             })
             .catch((error) => console.error("Error:", error));
@@ -292,7 +322,7 @@ document.querySelectorAll(".sidebar-link").forEach((link) => {
 
 // Load the last page and set the active link
 window.addEventListener("DOMContentLoaded", (event) => {
-    const lastPage = localStorage.getItem("lastPage") || "./dashboard/dashboard.php"; // Default to dashboard if no lastPage
+    const lastPage = localStorage.getItem("lastPage") || "./dashboard/index.php"; // Default to dashboard if no lastPage
 
 
     fetch(lastPage)
@@ -306,11 +336,13 @@ window.addEventListener("DOMContentLoaded", (event) => {
             document.getElementById("content").innerHTML = html;
 
             //initializeDashboardScripts
-            if (lastPage === "./dashboard/dashboard.php") {
+            if (lastPage === "./dashboard/index.php") {
                 initializeDashboardScripts();
                
-            }else if(lastPage === "./members/members.php"){
+            }else if(lastPage === "./members/index.php"){
                 initializeMemberScripts();
+            }else if(lastPage === "./elders/index.php"){
+                initializeElderScripts();
             }
 
             // Highlight the active sidebar link
@@ -331,45 +363,8 @@ window.addEventListener("DOMContentLoaded", (event) => {
 
 });
 
-/*
-// Function to initialize the dashboard scripts
-function initializeDashboardScripts() {
-    const offertoryCtx = document.getElementById('offertoryChart').getContext('2d');
-    const offertoryChart = new Chart(offertoryCtx, {
-        type: 'line',
-        data: {
-            labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
-            datasets: [{
-                label: 'Offertory',
-                data: [100, 150, 200, 450],
-                backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                borderColor: 'rgba(54, 162, 235, 1)',
-                borderWidth: 1
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: true,
-        }
-    });
 
 
-    const attendanceCtx = document.getElementById('attendanceChart').getContext('2d');
-    const attendanceChart = new Chart(attendanceCtx, {
-        type: 'line',
-        data: {
-            labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
-            datasets: [{
-                label: 'Attendance',
-                data: [80, 85, 90, 95],
-                backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                borderColor: 'rgba(75, 192, 192, 1)',
-                borderWidth: 1
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: true,
-        }
-    });
-}*/
+
+
+
