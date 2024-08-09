@@ -11,8 +11,8 @@ $total_members = $result->fetch_assoc()['total_members'];
 $result = $conn->query("SELECT COUNT(*) as total_elders FROM elders");
 $total_elders = $result->fetch_assoc()['total_elders'];
 
-// Fetch Attendance Last Service
-$result = $conn->query("SELECT COUNT(*) as total_attendance FROM attendance ORDER BY service_date DESC LIMIT 1");
+// Fetch Total Attendance For Last Service
+$result = $conn->query("SELECT SUM(males_count + females_count + children_count) as total_attendance FROM attendance WHERE service_date = (SELECT MAX(service_date) FROM attendance)");
 $last_service_attendance = $result->fetch_assoc()['total_attendance'];
 
 // Fetch Total Offertory

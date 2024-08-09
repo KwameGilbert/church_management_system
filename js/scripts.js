@@ -82,6 +82,7 @@ window.addEventListener("DOMContentLoaded", (event) => {
             //initializeDashboardScripts
             if (lastPage === "../dashboard/dashboard.php") {
                 fetch("../dashboard/dashboard.js");
+               
             }
 
             // Highlight the active sidebar link
