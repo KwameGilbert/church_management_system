@@ -1,3 +1,65 @@
+
+function initializeDashboardScripts(){
+    
+    // begining dashboard scripts
+    
+        // Fetch chart data
+        fetch('./dashboard/fetch-chart-data.php')
+            .then(response => response.json())
+            .then(data => {
+                const offertoryLabels = data.offertory.length ? data.offertory.map(item => `Week ${item.week}`) : ['No Offertory Record Available'];
+                const offertoryValues = data.offertory.length ? data.offertory.map(item => item.total) : [0];
+    
+                const attendanceLabels = data.attendance.length ? data.attendance.map(item => `Week ${item.week}`) : ['No Attendance Record Available'];
+                const attendanceValues = data.attendance.length ? data.attendance.map(item => item.total) : [0];
+    
+                // Create Offertory Chart
+                const offertoryCtx = document.getElementById('offertoryChart').getContext('2d');
+                new Chart(offertoryCtx, {
+                    type: 'line',
+                    data: {
+                        labels: offertoryLabels,
+                        datasets: [{
+                            label: 'Offertory',
+                            data: offertoryValues,
+                            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                            borderColor: 'rgba(54, 162, 235, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true
+                    }
+                });
+    
+                // Create Attendance Chart
+                const attendanceCtx = document.getElementById('attendanceChart').getContext('2d');
+                new Chart(attendanceCtx, {
+                    type: 'line',
+                    data: {
+                        labels: attendanceLabels,
+                        datasets: [{
+                            label: 'Attendance',
+                            data: attendanceValues,
+                            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true
+                    }
+                });
+            })
+            .catch(error => console.error('Error fetching chart data:', error));
+            // end of dashboard scripts
+    };
+
+
+
+
 const sidebar = document.getElementById("sidebar");
 const content = document.getElementById("content");
 const sidebarTitle = document.getElementById("sidebarTitle");
@@ -34,7 +96,7 @@ document.querySelectorAll(".sidebar-link").forEach((link) => {
 
         // Store the last opened page in localStorage
         localStorage.setItem("lastPage", page);
-
+        const lastPage = localStorage.getItem("lastPage");
 
         // Remove active class from all links
         document.querySelectorAll(".sidebar-link").forEach((link) => {
@@ -56,8 +118,9 @@ document.querySelectorAll(".sidebar-link").forEach((link) => {
                 document.getElementById("content").innerHTML = html;
 
                 //initializeDashboardScripts
-                if (page === "../dashboard/dashboard.php") {
-                    fetch("../dashboard/dashboard.js");
+                if (lastPage === "./dashboard/dashboard.php") {
+                    initializeDashboardScripts();
+                   
                 }
             })
             .catch((error) => console.error("Error:", error));
@@ -66,7 +129,7 @@ document.querySelectorAll(".sidebar-link").forEach((link) => {
 
 // Load the last page and set the active link
 window.addEventListener("DOMContentLoaded", (event) => {
-    const lastPage = localStorage.getItem("lastPage") || "../dashboard/dashboard.php"; // Default to dashboard if no lastPage
+    const lastPage = localStorage.getItem("lastPage") || "./dashboard/dashboard.php"; // Default to dashboard if no lastPage
 
 
     fetch(lastPage)
@@ -80,8 +143,8 @@ window.addEventListener("DOMContentLoaded", (event) => {
             document.getElementById("content").innerHTML = html;
 
             //initializeDashboardScripts
-            if (lastPage === "../dashboard/dashboard.php") {
-                fetch("../dashboard/dashboard.js");
+            if (lastPage === "./dashboard/dashboard.php") {
+                initializeDashboardScripts();
                
             }
 
@@ -100,63 +163,8 @@ window.addEventListener("DOMContentLoaded", (event) => {
 
 
 
-// begining dashboard scripts
 
-    // Fetch chart data
-    fetch('./dashboard/fetch-chart-data.php')
-        .then(response => response.json())
-        .then(data => {
-            const offertoryLabels = data.offertory.length ? data.offertory.map(item => `Week ${item.week}`) : ['No Offertory Record Available'];
-            const offertoryValues = data.offertory.length ? data.offertory.map(item => item.total) : [0];
-
-            const attendanceLabels = data.attendance.length ? data.attendance.map(item => `Week ${item.week}`) : ['No Attendance Record Available'];
-            const attendanceValues = data.attendance.length ? data.attendance.map(item => item.total) : [0];
-
-            // Create Offertory Chart
-            const offertoryCtx = document.getElementById('offertoryChart').getContext('2d');
-            new Chart(offertoryCtx, {
-                type: 'line',
-                data: {
-                    labels: offertoryLabels,
-                    datasets: [{
-                        label: 'Offertory',
-                        data: offertoryValues,
-                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                        borderColor: 'rgba(54, 162, 235, 1)',
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: true
-                }
-            });
-
-            // Create Attendance Chart
-            const attendanceCtx = document.getElementById('attendanceChart').getContext('2d');
-            new Chart(attendanceCtx, {
-                type: 'line',
-                data: {
-                    labels: attendanceLabels,
-                    datasets: [{
-                        label: 'Attendance',
-                        data: attendanceValues,
-                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                        borderColor: 'rgba(75, 192, 192, 1)',
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: true
-                }
-            });
-        })
-        .catch(error => console.error('Error fetching chart data:', error));
 });
-
-
-// end of dashboard scripts
 
 /*
 // Function to initialize the dashboard scripts
