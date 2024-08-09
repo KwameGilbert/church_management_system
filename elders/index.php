@@ -44,10 +44,10 @@ require_once("../database/db_connection.php");
                     while ($row = $result->fetch_assoc()) {
                         echo "<tr class='border-b'>
                                 <td class='px-4 py-2'>
-                                    <img src='images/{$row['image']}' alt='{$row['member_name']}' class='h-16 w-16 object-cover rounded-full'>
+                                    <img src='images/{$row['elder_image']}' alt='{$row['member_name']}' class='h-16 w-16 object-cover rounded-full'>
                                 </td>
                                 <td class='px-4 py-2'>{$row['member_name']}</td>
-                                <td class='px-4 py-2'>{$row['position']}</td>
+                                <td class='px-4 py-2'>{$row['elder_position']}</td>
                                 <td class='px-4 py-2'>
                                     <button class='bg-green-500 text-white px-3 py-1 rounded-md editBtn' data-id='{$row['elder_id']}'>Edit</button>
                                     <button class='bg-red-500 text-white px-3 py-1 rounded-md deleteBtn' data-id='{$row['elder_id']}'>Delete</button>

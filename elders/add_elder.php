@@ -14,11 +14,11 @@ $stmt->fetch();
 $stmt->close();
 
 $imageName = strtolower(str_replace(' ', '_', $member_name)) . '.' . pathinfo($image['name'], PATHINFO_EXTENSION);
-$targetDir = "images/";
+$targetDir = "../images/";
 $targetFile = $targetDir . basename($imageName);
 
 if (move_uploaded_file($image['tmp_name'], $targetFile)) {
-    $query = "INSERT INTO elders (member_id, position, image) VALUES (?, ?, ?)";
+    $query = "INSERT INTO elders (member_id, elder_position, elder_image) VALUES (?, ?, ?)";
     $stmt = $conn->prepare($query);
     $stmt->bind_param('iss', $member_id, $position, $imageName);
 

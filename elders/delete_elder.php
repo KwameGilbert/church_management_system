@@ -4,7 +4,7 @@ require_once("../database/db_connection.php");
 $elder_id = $_POST['elder_id'];
 
 // Get the image filename before deleting the elder
-$query = "SELECT image FROM elders WHERE elder_id = ?";
+$query = "SELECT elder_image FROM elders WHERE elder_id = ?";
 $stmt = $conn->prepare($query);
 $stmt->bind_param('i', $elder_id);
 $stmt->execute();

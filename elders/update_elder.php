@@ -21,7 +21,7 @@ $targetFile = $targetDir . basename($imageName);
 // Check if a new image is uploaded
 if ($image['size'] > 0) {
     // Delete the old image
-    $query = "SELECT image FROM elders WHERE elder_id = ?";
+    $query = "SELECT elder_image FROM elders WHERE elder_id = ?";
     $stmt = $conn->prepare($query);
     $stmt->bind_param('i', $elder_id);
     $stmt->execute();
@@ -40,7 +40,7 @@ if ($image['size'] > 0) {
     }
 } else {
     // Use the existing image name if no new image is uploaded
-    $imageNameQuery = "SELECT image FROM elders WHERE elder_id = ?";
+    $imageNameQuery = "SELECT elder_image FROM elders WHERE elder_id = ?";
     $stmt = $conn->prepare($imageNameQuery);
     $stmt->bind_param('i', $elder_id);
     $stmt->execute();
@@ -49,7 +49,7 @@ if ($image['size'] > 0) {
     $stmt->close();
 }
 
-$updateQuery = "UPDATE elders SET member_id = ?, position = ?, image = ? WHERE elder_id = ?";
+$updateQuery = "UPDATE elders SET member_id = ?, elder_position = ?, elder_image = ? WHERE elder_id = ?";
 $stmt = $conn->prepare($updateQuery);
 $stmt->bind_param('issi', $member_id, $position, $imageName, $elder_id);
 

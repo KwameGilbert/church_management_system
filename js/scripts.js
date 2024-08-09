@@ -221,13 +221,13 @@ function initializeMemberScripts() {
 
 
 
-//Start of Elder scripts
+// Start of Elder scripts
 function initializeElderScripts() {
-
     document.getElementById('addElderBtn').addEventListener('click', function () {
         document.getElementById('elderModal').classList.remove('hidden');
         document.getElementById('elderForm').reset();
         document.getElementById('modalTitle').innerText = 'Add Elder';
+        document.getElementById('elderId').value = '';  // Clear elderId to ensure it's an Add operation
         document.getElementById('imagePreview').style.display = 'none';
     });
 
@@ -247,33 +247,88 @@ function initializeElderScripts() {
         }
     });
 
-
     document.getElementById('elderForm').addEventListener('submit', function (e) {
         e.preventDefault();
 
         const formData = new FormData(this);
         const elderId = document.getElementById('elderId').value;
 
-        fetch(elderId ? 'update_elder.php' : 'add_elder.php', {
+        fetch(elderId ? './elders/update_elder.php' : './elders/add_elder.php', {
             method: 'POST',
             body: formData,
         })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    Swal.fire('Success', data.message, 'success');
-                    setTimeout(() => location.reload(), 1500);
-                } else {
-                    Swal.fire('Error', data.message, 'error');
-                }
-            })
-            .catch(error => console.error('Error:', error));
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                Swal.fire('Success', data.message, 'success');
+                setTimeout(() => location.reload(), 1500);
+            } else {
+                Swal.fire('Error', data.message, 'error');
+            }
+        })
+        .catch(error => console.error('Error:', error));
     });
 
+    // Edit button event listeners
+    document.querySelectorAll('.editBtn').forEach(button => {
+        button.addEventListener('click', function () {
+            const elderId = this.getAttribute('data-id');
+            fetch(`./elders/get_elder.php?id=${elderId}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        document.getElementById('elderModal').classList.remove('hidden');
+                        document.getElementById('modalTitle').innerText = 'Edit Elder';
+                        document.getElementById('elderId').value = data.elder.elder_id;
+                        document.getElementById('member_id').value = data.elder.member_id;
+                        document.getElementById('position').value = data.elder.elder_position;
+                        document.getElementById('imagePreview').setAttribute('src', `images/${data.elder.elder_image}`);
+                        document.getElementById('imagePreview').style.display = 'block';
+                    } else {
+                        Swal.fire('Error', data.message, 'error');
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        });
+    });
 
-    // Add similar event listeners for the edit and delete buttons
-
+    // Delete button event listeners
+    document.querySelectorAll('.deleteBtn').forEach(button => {
+        button.addEventListener('click', function () {
+            const elderId = this.getAttribute('data-id');
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    fetch('./elders/delete_elder.php', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                        body: `elder_id=${elderId}`,
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            Swal.fire('Deleted!', data.message, 'success');
+                            setTimeout(() => location.reload(), 1500);
+                        } else {
+                            Swal.fire('Error', data.message, 'error');
+                        }
+                    })
+                    .catch(error => console.error('Error:', error));
+                }
+            });
+        });
+    });
 }
+
+// End of Elder scripts
+
 
 
 
