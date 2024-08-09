@@ -62,23 +62,25 @@ $conn->close();
                     <td class="border px-4 py-2"><?php echo htmlspecialchars($row['member_address']); ?></td>
                     <td class="border px-4 py-2"><?php echo htmlspecialchars($row['member_position']); ?></td>
                     <td class="border px-4 py-2">
-                        <button 
-                            class="bg-yellow-500 text-white px-2 py-1 rounded editBtn" 
-                            data-id="<?php echo $row['member_id']; ?>"
-                            data-name="<?php echo htmlspecialchars($row['member_name']); ?>"
-                            data-email="<?php echo htmlspecialchars($row['member_email']); ?>"
-                            data-contact="<?php echo htmlspecialchars($row['member_contact']); ?>"
-                            data-address="<?php echo htmlspecialchars($row['member_address']); ?>"
-                            data-position="<?php echo htmlspecialchars($row['member_position']); ?>"
-                        >
-                            Edit
-                        </button>
-                        <button 
-                            class="bg-red-500 text-white px-2 py-1 rounded deleteBtn" 
-                            data-id="<?php echo $row['member_id']; ?>"
-                        >
-                            Delete
-                        </button>
+                        <div class="flex">
+                            <button 
+                                class="bg-yellow-500 text-white px-2 py-1 rounded editBtn" 
+                                data-id="<?php echo $row['member_id']; ?>"
+                                data-name="<?php echo htmlspecialchars($row['member_name']); ?>"
+                                data-email="<?php echo htmlspecialchars($row['member_email']); ?>"
+                                data-contact="<?php echo htmlspecialchars($row['member_contact']); ?>"
+                                data-address="<?php echo htmlspecialchars($row['member_address']); ?>"
+                                data-position="<?php echo htmlspecialchars($row['member_position']); ?>"
+                            >
+                                Edit
+                            </button>
+                            <button 
+                                class="bg-red-500 text-white px-2 py-1 rounded deleteBtn ml-2" 
+                                data-id="<?php echo $row['member_id']; ?>"
+                            >
+                                Delete
+                            </button>
+                        </div>
                     </td>
                 </tr>
                 <?php endwhile; ?>

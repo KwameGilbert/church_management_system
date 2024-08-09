@@ -149,29 +149,37 @@ function initializeMemberScripts(){
         // Edit Member Form Submission
         document.getElementById('editMemberForm').addEventListener('submit', function(event) {
             event.preventDefault();
-    
+
             const id = document.getElementById('editMemberId').value;
             const name = document.getElementById('editMemberName').value;
             const email = document.getElementById('editMemberEmail').value;
             const contact = document.getElementById('editMemberContact').value;
             const address = document.getElementById('editMemberAddress').value;
             const position = document.getElementById('editMemberPosition').value;
-    
+
             // AJAX request to edit member
             const xhr = new XMLHttpRequest();
             xhr.open('POST', './members/edit_member.php', true);
             xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
             xhr.onload = function() {
                 if (xhr.status === 200) {
-                    Swal.fire('Success', 'Member updated successfully!', 'success').then(() => {
-                        location.reload();
-                    });
+                    const response = JSON.parse(xhr.responseText);
+                    if (response.state === 'success') {
+                        Swal.fire('Success', 'Member updated successfully!', 'success').then(() => {
+                            location.reload();
+                        });
+                    } else if (response.state === 'duplicate') {
+                        Swal.fire('Error', 'Email already exists!', 'error');
+                    } else {
+                        Swal.fire('Error', 'There was an error updating the member.', 'error');
+                    }
                 } else {
                     Swal.fire('Error', 'There was an error updating the member.', 'error');
                 }
             };
             xhr.send(`id=${encodeURIComponent(id)}&name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}&contact=${encodeURIComponent(contact)}&address=${encodeURIComponent(address)}&position=${encodeURIComponent(position)}`);
         });
+        
     
         // Delete Member
         document.querySelectorAll('.deleteBtn').forEach(button => {

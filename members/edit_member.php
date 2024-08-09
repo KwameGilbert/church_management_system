@@ -14,9 +14,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->bind_param('sssssi', $name, $email, $contact, $address, $position, $id);
 
     if ($stmt->execute()) {
-        echo 'Success';
+        header('HTTP/1.1 200 OK');
+        echo json_encode(['state' => 'success']);
+    } else if ($stmt->errno == 1062) {
+        header('HTTP/1.1 409 Conflict');
+        echo json_encode(['state' => 'duplicate']);
     } else {
-        echo 'Error';
+        header('HTTP/1.1 500 Internal Server Error');
+        echo json_encode(['state' => 'error']);
     }
 
     $stmt->close();
