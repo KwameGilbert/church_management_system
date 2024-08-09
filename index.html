@@ -1,68 +1,109 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Church Management System</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
     <style>
         /* Custom styles for transition */
         .transition-width {
             transition: width 0.3s;
         }
+
         .transition-margin {
             transition: margin-left 0.3s;
         }
+
+
+        body {
+            display: flex;
+            min-height: 100vh;
+            /* Ensure body takes the full height of the screen */
+            overflow: hidden;
+            /* Prevent scrolling on the entire body */
+        }
+
+        #sidebar {
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            overflow-y: auto;
+            /* Allow scrolling inside the sidebar if it overflows */
+        }
+
+        #content {
+            margin-left: 16rem;
+            /* Adjust this based on your sidebar width */
+            flex: 1;
+            overflow-y: auto;
+            /* Enable scrolling for the content */
+            padding: 1.5rem;
+            /* Adjust based on your design */
+            height: 100vh;
+            box-sizing: border-box;
+        }
+
+        .transition-width {
+            transition: width 0.3s, margin-left 0.3s;
+        }
+    </style>
+
     </style>
 </head>
-<body class="bg-gray-100 h-screen flex overflow-hidden">
 
+<body class="bg-gray-100 h-screen flex overflow-hidden">
     <!-- Sidebar -->
     <div id="sidebar" class="bg-gray-800 text-white w-64 transition-width">
         <div class="flex items-center justify-between p-4">
             <div id="churchIcon" class="text-2xl">
-                <i class="fas fa-church"></i> 
+                <i class="fas fa-church"></i>
                 <span id="sidebarTitle" class="ml-2">CMS</span>
             </div>
             <button id="hamburger" class="text-white focus:outline-none">
                 <i class="fas fa-bars text-xl"></i>
             </button>
         </div>
+        <!-- Sidebar navigation -->
         <nav class="mt-5">
             <ul>
                 <li class="px-4 py-2 hover:bg-gray-700 transition">
-                    <a href="dashboard.php" class="flex items-center">
-                        <i class="fas fa-tachometer-alt mr-3"></i> 
+                    <a href="./dashboard/dashboard.php" class="flex items-center sidebar-link"
+                        data-page="./dashboard/dashboard.php">
+                        <i class="fas fa-tachometer-alt mr-3"></i>
                         <span class="sidebar-text">Dashboard</span>
                     </a>
                 </li>
                 <li class="px-4 py-2 hover:bg-gray-700 transition">
-                    <a href="members.php" class="flex items-center">
+                    <a href="members.php" class="flex items-center sidebar-link" data-page="members.php">
                         <i class="fas fa-users mr-3"></i>
                         <span class="sidebar-text">Members</span>
                     </a>
                 </li>
                 <li class="px-4 py-2 hover:bg-gray-700 transition">
-                    <a href="elders.php" class="flex items-center">
+                    <a href="elders.php" class="flex items-center sidebar-link" data-page="elders.php">
                         <i class="fas fa-user-tie mr-3"></i>
                         <span class="sidebar-text">Elders</span>
                     </a>
                 </li>
                 <li class="px-4 py-2 hover:bg-gray-700 transition">
-                    <a href="offertory.php" class="flex items-center">
+                    <a href="offertory.php" class="flex items-center sidebar-link" data-page="offertory.php">
                         <i class="fas fa-donate mr-3"></i>
                         <span class="sidebar-text">Offertory</span>
                     </a>
                 </li>
                 <li class="px-4 py-2 hover:bg-gray-700 transition">
-                    <a href="attendance.php" class="flex items-center">
+                    <a href="attendance.php" class="flex items-center sidebar-link" data-page="attendance.php">
                         <i class="fas fa-calendar-check mr-3"></i>
                         <span class="sidebar-text">Attendance</span>
                     </a>
                 </li>
             </ul>
         </nav>
+
         <div class="absolute bottom-0 w-full">
             <li class="px-4 py-2 hover:bg-gray-700 transition">
                 <a href="logout.php" class="flex items-center">
@@ -74,35 +115,97 @@
     </div>
 
     <!-- Main content -->
-    <div id="content" class="flex-1 p-6 transition-margin">
-        <h1 class="text-2xl font-bold mb-4">Dashboard</h1>
-        <!-- Add your dashboard content here -->
-    </div>
+    <!-- Main content -->
+    <div id="content" class="transition-width overflow-y-auto h-screen">
+    <h1 class="text-2xl font-bold mb-4">Dashboard</h1>
+    <!-- Dashboard content goes here -->
+</div>
+
 
     <script>
-        const sidebar = document.getElementById('sidebar');
-        const content = document.getElementById('content');
-        const sidebarTitle = document.getElementById('sidebarTitle');
-        const sidebarText = document.querySelectorAll('.sidebar-text');
-        const hamburger = document.getElementById('hamburger');
-        const churchIcon = document.getElementById('churchIcon');
+        const sidebar = document.getElementById("sidebar");
+        const content = document.getElementById("content");
+        const sidebarTitle = document.getElementById("sidebarTitle");
+        const sidebarText = document.querySelectorAll(".sidebar-text");
+        const hamburger = document.getElementById("hamburger");
+        const churchIcon = document.getElementById("churchIcon");
 
-        hamburger.addEventListener('click', () => {
-            if (sidebar.classList.contains('w-64')) {
-                sidebar.classList.replace('w-64', 'w-16');
-                content.classList.replace('ml-64', 'ml-16');
-                sidebarTitle.style.display = 'none';
-                churchIcon.style.display = 'none';
-                sidebarText.forEach(text => text.style.display = 'none');
+        hamburger.addEventListener("click", () => {
+            if (sidebar.classList.contains("w-64")) {
+                sidebar.classList.replace("w-64", "w-16");
+                content.classList.replace("ml-64", "ml-16");
+                sidebarTitle.style.display = "none";
+                churchIcon.style.display = "none";
+                content.style.marginLeft = "4rem"; // Adjust for the smaller sidebar width
+                sidebarText.forEach((text) => (text.style.display = "none"));
             } else {
-                sidebar.classList.replace('w-16', 'w-64');
-                content.classList.replace('ml-16', 'ml-64');
-                sidebarTitle.style.display = 'inline';
-                churchIcon.style.display = 'inline';
-                sidebarText.forEach(text => text.style.display = 'inline');
+                sidebar.classList.replace("w-16", "w-64");
+                content.classList.replace("ml-16", "ml-64");
+                sidebarTitle.style.display = "inline";
+                churchIcon.style.display = "inline";
+                content.style.marginLeft = "16rem"; // Adjust for the larger sidebar width
+                sidebarText.forEach((text) => (text.style.display = "inline"));
+                
             }
         });
-    </script>
 
+        
+        document.querySelectorAll(".sidebar-link").forEach((link) => {
+            link.addEventListener("click", function (event) {
+                event.preventDefault();
+                const page = this.getAttribute("data-page");
+
+                // Store the last opened page in localStorage
+                localStorage.setItem("lastPage", page);
+
+                // Remove active class from all links
+                document.querySelectorAll(".sidebar-link").forEach((link) => {
+                    link.classList.remove("bg-gray-700", "text-white");
+                });
+
+                // Add active class to the clicked link
+                this.classList.add("bg-gray-700", "text-white");
+
+                // Load the selected page
+                fetch(page)
+                    .then((response) => {
+                        if (!response.ok) {
+                            throw new Error(`Could not load ${page}`);
+                        }
+                        return response.text();
+                    })
+                    .then((html) => {
+                        document.getElementById("content").innerHTML = html;
+                    })
+                    .catch((error) => console.error("Error:", error));
+            });
+        });
+
+        // Load the last page and set the active link
+        window.addEventListener("DOMContentLoaded", (event) => {
+            const lastPage = localStorage.getItem("lastPage") || "dashboard.php"; // Default to dashboard if no lastPage
+
+            fetch(lastPage)
+                .then((response) => {
+                    if (!response.ok) {
+                        throw new Error(`Could not load ${lastPage}`);
+                    }
+                    return response.text();
+                })
+                .then((html) => {
+                    document.getElementById("content").innerHTML = html;
+
+                    // Highlight the active sidebar link
+                    const activeLink = document.querySelector(
+                        `[data-page="${lastPage}"]`
+                    );
+                    if (activeLink) {
+                        activeLink.classList.add("bg-gray-700", "text-white");
+                    }
+                })
+                .catch((error) => console.error("Error:", error));
+        });
+    </script>
 </body>
+
 </html>
