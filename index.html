@@ -7,107 +7,102 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        .sidebar { 
-            transition: all 0.3s ease; 
-            width: 16rem; 
+        /* Custom styles for transition */
+        .transition-width {
+            transition: width 0.3s;
         }
-        .sidebar.collapsed { 
-            width: 4rem; 
-        }
-        .sidebar.collapsed .sidebar-menu .menu-item .menu-text { 
-            opacity: 0; 
-            visibility: hidden; 
-        }
-        .content { 
-            transition: all 0.3s ease; 
-            flex-grow: 1; 
+        .transition-margin {
+            transition: margin-left 0.3s;
         }
     </style>
 </head>
-<body class="flex h-screen bg-gray-100">
+<body class="bg-gray-100 h-screen flex overflow-hidden">
 
     <!-- Sidebar -->
-    <div id="sidebar" class="sidebar bg-gray-800 text-white h-full p-4 flex flex-col justify-between">
-        <div>
-            <div class="flex items-center mb-6">
-                <i class="fas fa-church text-3xl"></i>
-                <span id="sidebar-title" class="ml-4 text-2xl font-semibold">CMS</span>
+    <div id="sidebar" class="bg-gray-800 text-white w-64 transition-width">
+        <div class="flex items-center justify-between p-4">
+            <div id="churchIcon" class="text-2xl">
+                <i class="fas fa-church"></i> 
+                <span id="sidebarTitle" class="ml-2">CMS</span>
             </div>
-            <ul class="sidebar-menu">
-                <li id="dashboard" class="menu-item flex items-center py-2 px-4 cursor-pointer hover:bg-gray-700 rounded">
-                    <i class="fas fa-tachometer-alt text-xl"></i>
-                    <span class="menu-text ml-4">Dashboard</span>
+            <button id="hamburger" class="text-white focus:outline-none">
+                <i class="fas fa-bars text-xl"></i>
+            </button>
+        </div>
+        <nav class="mt-5">
+            <ul>
+                <li class="px-4 py-2 hover:bg-gray-700 transition">
+                    <a href="dashboard.php" class="flex items-center">
+                        <i class="fas fa-tachometer-alt mr-3"></i> 
+                        <span class="sidebar-text">Dashboard</span>
+                    </a>
                 </li>
-                <li id="members" class="menu-item flex items-center py-2 px-4 cursor-pointer hover:bg-gray-700 rounded">
-                    <i class="fas fa-users text-xl"></i>
-                    <span class="menu-text ml-4">Members</span>
+                <li class="px-4 py-2 hover:bg-gray-700 transition">
+                    <a href="members.php" class="flex items-center">
+                        <i class="fas fa-users mr-3"></i>
+                        <span class="sidebar-text">Members</span>
+                    </a>
                 </li>
-                <li id="elders" class="menu-item flex items-center py-2 px-4 cursor-pointer hover:bg-gray-700 rounded">
-                    <i class="fas fa-user-tie text-xl"></i>
-                    <span class="menu-text ml-4">Elders</span>
+                <li class="px-4 py-2 hover:bg-gray-700 transition">
+                    <a href="elders.php" class="flex items-center">
+                        <i class="fas fa-user-tie mr-3"></i>
+                        <span class="sidebar-text">Elders</span>
+                    </a>
                 </li>
-                <li id="offertory" class="menu-item flex items-center py-2 px-4 cursor-pointer hover:bg-gray-700 rounded">
-                    <i class="fas fa-hand-holding-usd text-xl"></i>
-                    <span class="menu-text ml-4">Offertory</span>
+                <li class="px-4 py-2 hover:bg-gray-700 transition">
+                    <a href="offertory.php" class="flex items-center">
+                        <i class="fas fa-donate mr-3"></i>
+                        <span class="sidebar-text">Offertory</span>
+                    </a>
                 </li>
-                <li id="attendance" class="menu-item flex items-center py-2 px-4 cursor-pointer hover:bg-gray-700 rounded">
-                    <i class="fas fa-calendar-check text-xl"></i>
-                    <span class="menu-text ml-4">Attendance</span>
+                <li class="px-4 py-2 hover:bg-gray-700 transition">
+                    <a href="attendance.php" class="flex items-center">
+                        <i class="fas fa-calendar-check mr-3"></i>
+                        <span class="sidebar-text">Attendance</span>
+                    </a>
                 </li>
             </ul>
-        </div>
-        <div>
-            <button id="logout" class="flex items-center w-full py-2 px-4 text-red-400 hover:bg-gray-700 rounded">
-                <i class="fas fa-sign-out-alt text-xl"></i>
-                <span class="menu-text ml-4">Logout</span>
-            </button>
+        </nav>
+        <div class="absolute bottom-0 w-full">
+            <li class="px-4 py-2 hover:bg-gray-700 transition">
+                <a href="logout.php" class="flex items-center">
+                    <i class="fas fa-sign-out-alt mr-3"></i>
+                    <span class="sidebar-text">Logout</span>
+                </a>
+            </li>
         </div>
     </div>
 
-    <!-- Content -->
-    <div id="content" class="content p-8">
-        <!-- Content will be loaded here -->
-        <div id="page-content">
-            <h1 class="text-3xl font-bold mb-4">Dashboard</h1>
-            <!-- Dashboard content here -->
-        </div>
+    <!-- Main content -->
+    <div id="content" class="flex-1 p-6 transition-margin">
+        <h1 class="text-2xl font-bold mb-4">Dashboard</h1>
+        <!-- Add your dashboard content here -->
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const sidebar = document.getElementById('sidebar');
-            const content = document.getElementById('content');
-            const pageContent = document.getElementById('page-content');
-            const sidebarTitle = document.getElementById('sidebar-title');
+        const sidebar = document.getElementById('sidebar');
+        const content = document.getElementById('content');
+        const sidebarTitle = document.getElementById('sidebarTitle');
+        const sidebarText = document.querySelectorAll('.sidebar-text');
+        const hamburger = document.getElementById('hamburger');
+        const churchIcon = document.getElementById('churchIcon');
 
-            // Sidebar toggle
-            sidebar.addEventListener('click', () => {
-                sidebar.classList.toggle('collapsed');
-                content.classList.toggle('expanded');
-            });
-
-            // Menu item click
-            document.querySelectorAll('.menu-item').forEach(item => {
-                item.addEventListener('click', (e) => {
-                    const page = e.currentTarget.id;
-                    loadPage(page);
-                });
-            });
-
-            // Logout click
-            document.getElementById('logout').addEventListener('click', () => {
-                // Handle logout logic here
-                alert('Logged out!');
-            });
-
-            function loadPage(page) {
-                fetch(`${page}.html`)
-                    .then(response => response.text())
-                    .then(html => {
-                        pageContent.innerHTML = html;
-                    });
+        hamburger.addEventListener('click', () => {
+            if (sidebar.classList.contains('w-64')) {
+                sidebar.classList.replace('w-64', 'w-16');
+                content.classList.replace('ml-64', 'ml-16');
+                sidebarTitle.style.display = 'none';
+                churchIcon.style.display = 'none';
+                sidebarText.forEach(text => text.style.display = 'none');
+            } else {
+                sidebar.classList.replace('w-16', 'w-64');
+                content.classList.replace('ml-16', 'ml-64');
+                sidebarTitle.style.display = 'inline';
+                churchIcon.style.display = 'inline';
+                sidebarText.forEach(text => text.style.display = 'inline');
             }
         });
     </script>
+
 </body>
 </html>
