@@ -56,14 +56,7 @@ function initializeDashboardScripts() {
         .catch(error => console.error('Error fetching chart data:', error));
 
 };
-
 //End of Dashboard Scripts
-
-
-
-
-
-
 
 
 
@@ -219,8 +212,6 @@ function initializeMemberScripts() {
 
 
 
-
-
 // Start of Elder scripts
 function initializeElderScripts() {
     document.getElementById('addElderBtn').addEventListener('click', function () {
@@ -269,7 +260,7 @@ function initializeElderScripts() {
         .catch(error => console.error('Error:', error));
     });
 
-    // Edit button event listeners
+    // Elder Edit button event listeners
     document.querySelectorAll('.editBtn').forEach(button => {
         button.addEventListener('click', function () {
             const elderId = this.getAttribute('data-id');
@@ -326,13 +317,105 @@ function initializeElderScripts() {
         });
     });
 }
-
 // End of Elder scripts
 
 
 
+//Start of Offertory Scripts
+function initializeOffertoryScripts() {
 
-//End of Member Scripts
+    document.getElementById('addOffertoryBtn').addEventListener('click', function () {
+        document.getElementById('offertoryModal').classList.remove('hidden');
+        document.getElementById('offertoryForm').reset();
+        document.getElementById('modalTitle').innerText = 'Add Offertory';
+    });
+
+    document.getElementById('cancelBtn').addEventListener('click', function () {
+        document.getElementById('offertoryModal').classList.add('hidden');
+    });
+
+    document.getElementById('offertoryForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        const formData = new FormData(this);
+        const offertoryId = document.getElementById('offertoryId').value;
+
+        fetch(offertoryId ? './offertories/update_offertory.php' : './offertories/add_offertory.php', {
+            method: 'POST',
+            body: formData,
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    Swal.fire('Success', data.message, 'success');
+                    setTimeout(() => location.reload(), 1500);
+                } else {
+                    Swal.fire('Error', data.message, 'error');
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    });
+
+    document.querySelectorAll('.editBtn').forEach(button => {
+        button.addEventListener('click', function () {
+            const offertoryId = this.dataset.id;
+    
+            fetch(`./offertories/get_offertory.php?id=${offertoryId}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        document.getElementById('offertoryId').value = data.offertory.offertory_id;
+                        document.getElementById('offertoryDate').value = data.offertory.offertory_date;
+                        document.getElementById('amount').value = data.offertory.amount;
+                        document.getElementById('serviceName').value = data.offertory.service_name;
+    
+                        document.getElementById('modalTitle').innerText = 'Edit Offertory';
+                        document.getElementById('offertoryModal').classList.remove('hidden');
+                    } else {
+                        Swal.fire('Error', 'Failed to fetch offertory details.', 'error');
+                    }
+                });
+        });
+    });
+    
+    document.querySelectorAll('.deleteBtn').forEach(button => {
+        button.addEventListener('click', function () {
+            const offertoryId = this.dataset.id;
+    
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    fetch('./offertories/delete_offertory.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ offertory_id: offertoryId }),
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                Swal.fire('Deleted!', data.message, 'success');
+                                setTimeout(() => location.reload(), 1500);
+                            } else {
+                                Swal.fire('Error', data.message, 'error');
+                            }
+                        });
+                }
+            });
+        });
+    });
+    
+}
+
+
 const sidebar = document.getElementById("sidebar");
 const content = document.getElementById("content");
 const sidebarTitle = document.getElementById("sidebarTitle");
@@ -359,6 +442,10 @@ hamburger.addEventListener("click", () => {
 
     }
 });
+
+
+
+
 
 
 //Automatic Page Loading
@@ -397,6 +484,8 @@ document.querySelectorAll(".sidebar-link").forEach((link) => {
                     initializeMemberScripts();
                 } else if (lastPage === "./elders/index.php") {
                     initializeElderScripts();
+                }else if (lastPage === "./offertories/index.php"){
+                    initializeOffertoryScripts();
                 }
             })
             .catch((error) => console.error("Error:", error));
@@ -421,11 +510,12 @@ window.addEventListener("DOMContentLoaded", (event) => {
             //initializeDashboardScripts
             if (lastPage === "./dashboard/index.php") {
                 initializeDashboardScripts();
-
             } else if (lastPage === "./members/index.php") {
                 initializeMemberScripts();
             } else if (lastPage === "./elders/index.php") {
                 initializeElderScripts();
+            } else if (lastPage === "./offertories/index.php"){
+                initializeOffertoryScripts();
             }
 
             // Highlight the active sidebar link
