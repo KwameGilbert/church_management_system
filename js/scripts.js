@@ -60,6 +60,159 @@ function initializeDashboardScripts(){
 
 
 
+
+
+
+
+
+
+
+    //Member Scripts.
+function initializeMemberScripts(){
+
+        // Auto-filter members as user types in the search bar
+        const searchBar = document.getElementById('searchBar');
+        searchBar.addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            document.querySelectorAll('tbody tr').forEach(function(row) {
+                const memberName = row.querySelector('td:first-child').textContent.toLowerCase();
+                if (memberName.includes(searchTerm)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+    
+        // Open Add Member Modal
+        document.getElementById('addMemberBtn').addEventListener('click', function() {
+            document.getElementById('addMemberModal').classList.remove('hidden');
+        });
+    
+        // Close Add Member Modal
+        document.getElementById('closeAddMemberModal').addEventListener('click', function() {
+            document.getElementById('addMemberModal').classList.add('hidden');
+        });
+    
+        // Open Edit Member Modal
+        document.querySelectorAll('.editBtn').forEach(button => {
+            button.addEventListener('click', function() {
+                const id = this.getAttribute('data-id');
+                const name = this.getAttribute('data-name');
+                const email = this.getAttribute('data-email');
+                const contact = this.getAttribute('data-contact');
+                const address = this.getAttribute('data-address');
+                const position = this.getAttribute('data-position');
+    
+                document.getElementById('editMemberId').value = id;
+                document.getElementById('editMemberName').value = name;
+                document.getElementById('editMemberEmail').value = email;
+                document.getElementById('editMemberContact').value = contact;
+                document.getElementById('editMemberAddress').value = address;
+                document.getElementById('editMemberPosition').value = position;
+    
+                document.getElementById('editMemberModal').classList.remove('hidden');
+            });
+        });
+    
+        // Close Edit Member Modal
+        document.getElementById('closeEditMemberModal').addEventListener('click', function() {
+            document.getElementById('editMemberModal').classList.add('hidden');
+        });
+    
+        // Add Member Form Submission
+        document.getElementById('addMemberForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+    
+            const name = document.getElementById('memberName').value;
+            const email = document.getElementById('memberEmail').value;
+            const contact = document.getElementById('memberContact').value;
+            const address = document.getElementById('memberAddress').value;
+            const position = document.getElementById('memberPosition').value;
+    
+            // AJAX request to add member
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', './members/add_member.php', true);
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    Swal.fire('Success', 'Member added successfully!', 'success').then(() => {
+                        location.reload();
+                    });
+                } else {
+                    Swal.fire('Error', 'There was an error adding the member.', 'error');
+                }
+            };
+            xhr.send(`name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}&contact=${encodeURIComponent(contact)}&address=${encodeURIComponent(address)}&position=${encodeURIComponent(position)}`);
+        });
+    
+        // Edit Member Form Submission
+        document.getElementById('editMemberForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+    
+            const id = document.getElementById('editMemberId').value;
+            const name = document.getElementById('editMemberName').value;
+            const email = document.getElementById('editMemberEmail').value;
+            const contact = document.getElementById('editMemberContact').value;
+            const address = document.getElementById('editMemberAddress').value;
+            const position = document.getElementById('editMemberPosition').value;
+    
+            // AJAX request to edit member
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', 'edit_member.php', true);
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    Swal.fire('Success', 'Member updated successfully!', 'success').then(() => {
+                        location.reload();
+                    });
+                } else {
+                    Swal.fire('Error', 'There was an error updating the member.', 'error');
+                }
+            };
+            xhr.send(`id=${encodeURIComponent(id)}&name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}&contact=${encodeURIComponent(contact)}&address=${encodeURIComponent(address)}&position=${encodeURIComponent(position)}`);
+        });
+    
+        // Delete Member
+        document.querySelectorAll('.deleteBtn').forEach(button => {
+            button.addEventListener('click', function() {
+                const id = this.getAttribute('data-id');
+    
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: 'This member will be deleted permanently.',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        const xhr = new XMLHttpRequest();
+                        xhr.open('POST', './members/delete_member.php', true);
+                        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                        xhr.onload = function() {
+                            if (xhr.status === 200) {
+                                Swal.fire('Deleted!', 'Member has been deleted.', 'success').then(() => {
+                                    location.reload();
+                                });
+                            } else {
+                                Swal.fire('Error', 'There was an error deleting the member.', 'error');
+                            }
+                        };
+                        xhr.send(`id=${encodeURIComponent(id)}`);
+                    }
+                });
+            });
+        });
+   
+}
+
+
+
+
+
+
 const sidebar = document.getElementById("sidebar");
 const content = document.getElementById("content");
 const sidebarTitle = document.getElementById("sidebarTitle");
@@ -121,6 +274,8 @@ document.querySelectorAll(".sidebar-link").forEach((link) => {
                 if (lastPage === "./dashboard/dashboard.php") {
                     initializeDashboardScripts();
                    
+                }else if(lastPage === "./members/members.php"){
+                    initializeMemberScripts();
                 }
             })
             .catch((error) => console.error("Error:", error));
@@ -146,6 +301,8 @@ window.addEventListener("DOMContentLoaded", (event) => {
             if (lastPage === "./dashboard/dashboard.php") {
                 initializeDashboardScripts();
                
+            }else if(lastPage === "./members/members.php"){
+                initializeMemberScripts();
             }
 
             // Highlight the active sidebar link
