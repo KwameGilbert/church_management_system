@@ -72,7 +72,9 @@ require_once("../database/db_connection.php");
 
             <div class="mb-4">
                 <label for="member_id" class="block text-sm font-medium text-gray-700">Member</label>
-                <select id="member_id" name="member_id" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                <select id="member_id" 
+                name="member_id" 
+                class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                     <option value="">Select a Member</option>
                     <?php
                     $membersQuery = "SELECT member_id, member_name FROM members";
@@ -106,31 +108,8 @@ require_once("../database/db_connection.php");
     </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="../js/scripts.js"></script>
 <script>
-document.getElementById('addElderBtn').addEventListener('click', function() {
-    document.getElementById('elderModal').classList.remove('hidden');
-    document.getElementById('elderForm').reset();
-    document.getElementById('modalTitle').innerText = 'Add Elder';
-    document.getElementById('imagePreview').style.display = 'none';
-});
-
-document.getElementById('cancelBtn').addEventListener('click', function() {
-    document.getElementById('elderModal').classList.add('hidden');
-});
-
-document.getElementById('image').addEventListener('change', function() {
-    const file = this.files[0];
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            document.getElementById('imagePreview').setAttribute('src', e.target.result);
-            document.getElementById('imagePreview').style.display = 'block';
-        }
-        reader.readAsDataURL(file);
-    }
-});
 </script>
 
 </body>
