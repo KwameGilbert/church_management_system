@@ -414,6 +414,110 @@ function initializeOffertoryScripts() {
     });
     
 }
+// End of Offertory scripts
+
+
+
+//Start of Attendance Scripts
+function initializeAttendanceScripts() {
+
+    // Open modal for adding attendance
+    document.getElementById('addAttendanceBtn').addEventListener('click', function () {
+        document.getElementById('attendanceModal').classList.remove('hidden');
+        document.getElementById('attendanceForm').reset();
+        document.getElementById('modalTitle').innerText = 'Add Attendance';
+    });
+
+    // Close modal
+    document.getElementById('cancelBtn').addEventListener('click', function () {
+        document.getElementById('attendanceModal').classList.add('hidden');
+    });
+
+    // Submit form (add or edit attendance)
+    document.getElementById('attendanceForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        const formData = new FormData(this);
+        const attendanceId = document.getElementById('attendanceId').value;
+
+        fetch(attendanceId ? './attendance/edit_attendance.php' : './attendance/add_attendance.php', {
+            method: 'POST',
+            body: formData,
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    Swal.fire('Success', data.message, 'success');
+                    setTimeout(() => location.reload(), 1500);
+                } else {
+                    Swal.fire('Error', data.message, 'error');
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    });
+
+    // Edit attendance
+    document.querySelectorAll('.editBtn').forEach(button => {
+        button.addEventListener('click', function () {
+            const attendanceId = this.dataset.id;
+
+            fetch(`./attendance/get_attendance.php?id=${attendanceId}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        document.getElementById('attendanceId').value = data.attendance.attendance_id;
+                        document.getElementById('serviceDate').value = data.attendance.service_date;
+                        document.getElementById('malesCount').value = data.attendance.males_count;
+                        document.getElementById('femalesCount').value = data.attendance.females_count;
+                        document.getElementById('childrenCount').value = data.attendance.children_count;
+                        document.getElementById('serviceName').value = data.attendance.service_name;
+
+                        document.getElementById('modalTitle').innerText = 'Edit Attendance';
+                        document.getElementById('attendanceModal').classList.remove('hidden');
+                    } else {
+                        Swal.fire('Error', data.message, 'error');
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        });
+    });
+
+    // Delete attendance
+    document.querySelectorAll('.deleteBtn').forEach(button => {
+        button.addEventListener('click', function () {
+            const attendanceId = this.dataset.id;
+
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'You won\'t be able to revert this!',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, delete it!',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    fetch('./attendance/delete_attendance.php', {
+                        method: 'POST',
+                        body: new URLSearchParams({ id: attendanceId }),
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                Swal.fire('Deleted!', data.message, 'success');
+                                setTimeout(() => location.reload(), 1500);
+                            } else {
+                                Swal.fire('Error', data.message, 'error');
+                            }
+                        })
+                        .catch(error => console.error('Error:', error));
+                }
+            });
+        });
+    });
+}
+//End of Attendance Scripts
+
+
+
 
 
 const sidebar = document.getElementById("sidebar");
@@ -484,8 +588,10 @@ document.querySelectorAll(".sidebar-link").forEach((link) => {
                     initializeMemberScripts();
                 } else if (lastPage === "./elders/index.php") {
                     initializeElderScripts();
-                }else if (lastPage === "./offertories/index.php"){
+                } else if (lastPage === "./offertories/index.php"){
                     initializeOffertoryScripts();
+                } else if (lastPage === "./attendance/index.php"){
+                    initializeAttendanceScripts();
                 }
             })
             .catch((error) => console.error("Error:", error));
@@ -516,6 +622,8 @@ window.addEventListener("DOMContentLoaded", (event) => {
                 initializeElderScripts();
             } else if (lastPage === "./offertories/index.php"){
                 initializeOffertoryScripts();
+            } else if (lastPage === "./attendance/index.php"){
+                initializeAttendanceScripts();
             }
 
             // Highlight the active sidebar link

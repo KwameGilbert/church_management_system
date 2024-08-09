@@ -53,65 +53,88 @@ $conn->close();
 
 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
     <div class="bg-white p-4 rounded-lg shadow-md">
-        <h2 class="text-xl font-semibold">Total Members</h2>
+        <h2 class="text-xl font-semibold">
+            <i class="fas fa-users mr-3"></i> Total Members
+        </h2>
         <p class="text-gray-700 text-3xl mt-2">
             <?php echo $total_members; ?>
         </p>
     </div>
+
     <div class="bg-white p-4 rounded-lg shadow-md">
-        <h2 class="text-xl font-semibold">Total Elders</h2>
+        <h2 class="text-xl font-semibold">
+            <i class="fas fa-user-tie mr-3"></i> Total Elders
+        </h2>
         <p class="text-gray-700 text-3xl mt-2">
             <?php echo $total_elders; ?>
         </p>
     </div>
+
     <div class="bg-white p-4 rounded-lg shadow-md">
-        <h2 class="text-xl font-semibold">Attendance Last Service</h2>
+        <h2 class="text-xl font-semibold">
+            <i class="fas fa-chart-line mr-3"></i> Attendance Last Service
+        </h2>
         <p class="text-gray-700 text-3xl mt-2">
             <?php echo $last_service_attendance; ?>
-    </p>
+        </p>
     </div>
+
     <div class="bg-white p-4 rounded-lg shadow-md">
-        <h2 class="text-xl font-semibold">Total Offertory</h2>
+        <h2 class="text-xl font-semibold">
+            <i class="fas fa-hand-holding-usd mr-3"></i> Total Offertory
+        </h2>
         <p class="text-gray-700 text-3xl mt-2">
-        $<?php echo $total_offertory; ?>
+            $<?php echo $total_offertory; ?>
         </p>
     </div>
 </div>
-
 <!-- Charts Section -->
 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
     <div class="bg-white p-4 rounded-lg shadow-md">
-        <h2 class="text-xl font-semibold mb-4">Offertory This Month</h2>
+        <h2 class="text-xl font-semibold mb-4">
+            <i class="fas fa-chart-pie mr-3"></i> Offertory This Month
+        </h2>
         <canvas id="offertoryChart"></canvas>
     </div>
     <div class="bg-white p-4 rounded-lg shadow-md">
-        <h2 class="text-xl font-semibold mb-4">Attendance This Month</h2>
+        <h2 class="text-xl font-semibold mb-4">
+            <i class="fas fa-chart-bar mr-3"></i> Attendance This Month
+        </h2>
         <canvas id="attendanceChart"></canvas>
     </div>
 </div>
 
 <!-- Last 5 Members Section -->
 <div class="bg-white p-4 rounded-lg shadow-md">
-    <h2 class="text-xl font-semibold mb-4">Last 5 Members Added</h2>
+    <h2 class="text-xl font-semibold mb-4">
+        <i class="fas fa-user-plus mr-3"></i> Last 5 Members Added
+    </h2>
     <table class="min-w-full table-auto">
         <thead>
             <tr class="bg-gray-200">
-                <th class="px-4 py-2">Name</th>
-                <th class="px-4 py-2">Email</th>
-                <th class="px-4 py-2">Date Joined</th>
+                <th class="px-4 py-2">
+                    <i class="fas fa-user mr-2"></i> Name
+                </th>
+                <th class="px-4 py-2">
+                    <i class="fas fa-envelope mr-2"></i> Email
+                </th>
+                <th class="px-4 py-2">
+                    <i class="fas fa-calendar-alt mr-2"></i> Date Joined
+                </th>
             </tr>
         </thead>
         <tbody>
-                <?php while($row = $last_five_members->fetch_assoc()): ?>
-                    <tr>
-                        <td class="border px-4 py-2"><?php echo $row['member_name']; ?></td>
-                        <td class="border px-4 py-2"><?php echo $row['member_email']; ?></td>
-                        <td class="border px-4 py-2"><?php echo $row['created_at']; ?></td>
-                    </tr>
-                <?php endwhile; ?>
-            </tbody>
+            <?php while($row = $last_five_members->fetch_assoc()): ?>
+                <tr>
+                    <td class="border px-4 py-2"><?php echo $row['member_name']; ?></td>
+                    <td class="border px-4 py-2"><?php echo $row['member_email']; ?></td>
+                    <td class="border px-4 py-2"><?php echo $row['created_at']; ?></td>
+                </tr>
+            <?php endwhile; ?>
+        </tbody>
     </table>
 </div>
+
 
 
 <script>

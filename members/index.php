@@ -43,7 +43,7 @@ $conn->close();
     <!-- Members Table -->
     <div class="bg-white shadow-md rounded-lg overflow-hidden">
         <table class="w-full table-auto">
-            <thead class="bg-gray-200">
+            <thead class="bg-gray-800 text-white">
                 <tr>
                     <th class="px-4 py-2">Name</th>
                     <th class="px-4 py-2">Email</th>
@@ -88,6 +88,7 @@ $conn->close();
         </table>
     </div>
 
+    
     <!-- Add Member Modal -->
     <div id="addMemberModal" class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 hidden">
         <div class="bg-white p-6 rounded-lg shadow-md w-1/3">

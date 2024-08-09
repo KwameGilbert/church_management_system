@@ -1,8 +1,11 @@
 <?php
 require_once("../database/db_connection.php");
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $offertory_id = $_POST['offertory_id'];
+// Decode the JSON payload
+$data = json_decode(file_get_contents("php://input"), true);
+
+if (isset($data['offertory_id'])) {
+    $offertory_id = $data['offertory_id'];
 
     $stmt = $conn->prepare("DELETE FROM offertory WHERE offertory_id = ?");
     $stmt->bind_param("i", $offertory_id);
@@ -14,6 +17,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
     $stmt->close();
-    $conn->close();
+} else {
+    echo json_encode(['success' => false, 'message' => 'Offertory ID not provided.']);
 }
+
+$conn->close();
 ?>

@@ -55,7 +55,7 @@
 </div>
 
 <!-- Add/Edit Offertory Modal -->
-<div id="offertoryModal" class="fixed z-10 inset-0 overflow-y-auto hidden">
+<div id="offertoryModal" class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 hidden">
     <div class="flex items-center justify-center min-h-screen">
         <div class="bg-white rounded-lg p-8 max-w-lg w-full">
             <h2 id="modalTitle" class="text-2xl font-bold mb-4">Add Offertory</h2>
@@ -86,13 +86,7 @@
     </div>
 </div>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        initializeOffertoryScripts();
-    });
 
-   
-</script>
 
 </body>
 </html>
