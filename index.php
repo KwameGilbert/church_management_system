@@ -120,6 +120,7 @@
             </ul>
         </nav>
 
+        
  <a href="logout.php" class="flex items-center">
         <div class="absolute bottom-0 w-full">
             <li class="px-4 py-2 hover:bg-gray-700 transition">
