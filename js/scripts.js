@@ -159,7 +159,7 @@ function initializeMemberScripts(){
     
             // AJAX request to edit member
             const xhr = new XMLHttpRequest();
-            xhr.open('POST', 'edit_member.php', true);
+            xhr.open('POST', './members/edit_member.php', true);
             xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
             xhr.onload = function() {
                 if (xhr.status === 200) {
