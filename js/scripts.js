@@ -210,8 +210,6 @@ function initializeMemberScripts() {
 }
 //End of Member Scripts
 
-
-
 // Start of Elder scripts
 function initializeElderScripts() {
     document.getElementById('addElderBtn').addEventListener('click', function () {
@@ -319,8 +317,6 @@ function initializeElderScripts() {
 }
 // End of Elder scripts
 
-
-
 //Start of Offertory Scripts
 function initializeOffertoryScripts() {
 
@@ -412,7 +408,6 @@ function initializeOffertoryScripts() {
             });
         });
     });
-    
 }
 // End of Offertory scripts
 

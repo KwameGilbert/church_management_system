@@ -20,7 +20,7 @@ $result = $conn->query("SELECT SUM(amount) as total_offertory FROM offertory");
 $total_offertory = $result->fetch_assoc()['total_offertory'];
 
 // Fetch Last 5 Members
-$last_five_members = $conn->query("SELECT member_name, member_email, created_at FROM members ORDER BY created_at DESC LIMIT 5");
+$last_five_members = $conn->query("SELECT member_name, member_contact, created_at FROM members ORDER BY created_at DESC LIMIT 10");
 
 // Fetch offertory data for the current month
 $offertoryData = [];
@@ -107,7 +107,7 @@ $conn->close();
 <!-- Last 5 Members Section -->
 <div class="bg-white p-4 rounded-lg shadow-md">
     <h2 class="text-xl font-semibold mb-4">
-        <i class="fas fa-user-plus mr-3"></i> Last 5 Members Added
+        <i class="fas fa-user-plus mr-3"></i> Last 10 Members Added
     </h2>
     <table class="min-w-full table-auto">
         <thead>
@@ -116,7 +116,7 @@ $conn->close();
                     <i class="fas fa-user mr-2"></i> Name
                 </th>
                 <th class="px-4 py-2">
-                    <i class="fas fa-envelope mr-2"></i> Email
+                    <i class="fas fa-envelope mr-2"></i> Contact
                 </th>
                 <th class="px-4 py-2">
                     <i class="fas fa-calendar-alt mr-2"></i> Date Joined
@@ -127,7 +127,7 @@ $conn->close();
             <?php while($row = $last_five_members->fetch_assoc()): ?>
                 <tr>
                     <td class="border px-4 py-2"><?php echo $row['member_name']; ?></td>
-                    <td class="border px-4 py-2"><?php echo $row['member_email']; ?></td>
+                    <td class="border px-4 py-2"><?php echo $row['member_contact']; ?></td>
                     <td class="border px-4 py-2"><?php echo $row['created_at']; ?></td>
                 </tr>
             <?php endwhile; ?>
